@@ -1,0 +1,13 @@
+{
+  "name": "esm2cjs",
+  "version": "1.0.0",
+  "description": "esm的npm包转cjs的npm包的cli",
+  "main": "index.js",
+  "bin": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
