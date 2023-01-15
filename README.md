@@ -1,6 +1,6 @@
 # esm2cjs
 
-esm的npm包转cjs的npm包的cli.
+将常见的其它格式的npm包转成cjs的npm包的cli.
 
 在开发cjs包时, 如果想使用esm包 (如[inquirer最新版本](https://www.npmjs.com/package/inquirer)、[chalk](https://www.npmjs.com/package/chalk)等), 难免需要配置复杂的打包配置来支持. 但也可以另辟蹊径, 用cli的方式自动将这些包转换为cjs包, 并用自己的账户存到npm仓库上. 同时也便于以后的开发.
 
@@ -8,20 +8,22 @@ esm的npm包转cjs的npm包的cli.
 
 # Install
 
-`npm i esm2cjs -g` or `yarn global add esm2cjs`
+`npm i npm2cjs -g` or `yarn global add npm2cjs`
 
 # Usage
 
 ### 设置要发布的包的前缀
 
-`esm2cjs config set npm-scope <scope-name>`
+`npm2cjs config set npm-scope <scope-name>`
 
-如 `esm2cjs config set npm-scope esm2cjs` : 要打包的包名为`chalk`, 发布之后的npm包即为`@esm2cjs/chalk`
+如 `npm2cjs config set npm-scope npm2cjs` : 要打包的包名为`chalk`, 发布之后的npm包即为`@npm2cjs/chalk`
 
-### esm to cjs
+### npm to cjs
 
-`esm2cjs do` 直接转换为cjs并发布
+`npm2cjs do <pkg-name>` 将包名为`<pkg-name>`的包转换为cjs, 并发布
 
-`esm2cjs do -d <target-dir> --no-publish` 只转换为cjs并保存到`<target-dir>`目录下, 不发布
+`npm2cjs do <pkg-name> -d <target-dir> --no-publish` 只将包名为`<pkg-name>`的包转换为cjs, 并保存到`<target-dir>`目录下, 不发布
 
-### 更多配置使用`esm2cjs -h`查看
+### 更多配置
+
+请使用`npm2cjs -h`查看
