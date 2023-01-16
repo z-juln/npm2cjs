@@ -24,6 +24,8 @@ class Npm2cjs {
       case 'esm':
         this.esm2cjs();
         break;
+      case 'esm_top-level-await':
+        this.esm_topLevelAwait();
       default:
         this.other2cjs();
     }
@@ -41,6 +43,10 @@ class Npm2cjs {
 
   esm2cjs() {
 
+  }
+
+  esm_topLevelAwait() {
+    throw simpleError(`\n✨✨✨ 目前还不支持<esm_top-level-await>的转换, 但是转换思路已经想好了: <https://juejin.cn/post/7188811856281075767>\n✨✨✨ 快来造轮子, 同时可以联系我: 微信<A1850021148>, github<${packageJson.homepage}>`);
   }
 
   other2cjs() {

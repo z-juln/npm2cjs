@@ -7,6 +7,7 @@ import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 import { NpmInfo } from './interface';
 import { simpleError } from './utils';
 
+// TODO: mjs包: esm + top-level-await的情况
 async function compile(npmInfo: NpmInfo, productFilepath: string) {
   const { inputOptions, outputOptions } = getOptions(npmInfo, productFilepath);
   await build(inputOptions, outputOptions);
