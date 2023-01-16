@@ -2,12 +2,20 @@
   "name": "npm2cjs",
   "version": "1.0.0",
   "description": "将常见的其它格式的npm包转成cjs的npm包的cli",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "bin": "bin/index.js",
+  "typings": "./dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx ts-node ./src/__test__/compile/index.test.ts",
+    "build": "npx tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/z-juln/npm2cjs.git"
   },
   "keywords": [
+    "compile",
     "translate",
     "cjs",
     "npm-to-cjs",
@@ -16,6 +24,27 @@
     "npm",
     "cli"
   ],
-  "author": "",
-  "license": "ISC"
+  "bugs": {
+    "url": "https://github.com/z-juln/npm2cjs/issues"
+  },
+  "homepage": "https://github.com/z-juln/npm2cjs#readme",
+  "author": "juln",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/babel__core": "^7.1.20",
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^18.11.18",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.0",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "configstore": "^6.0.0",
+    "fs-extra": "^11.1.0",
+    "rollup": "^3.10.0"
+  }
 }

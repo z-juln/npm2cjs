@@ -27,3 +27,7 @@
 ### 更多配置
 
 请使用`npm2cjs -h`查看
+
+# 两个问题无法解决
+
+1. 目标包不能用`top-level-await`, babel不会解析`top-level-await`且直接保留代码, webpack解析`top-level-await`会有bug
