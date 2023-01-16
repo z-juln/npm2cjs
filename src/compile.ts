@@ -15,7 +15,7 @@ async function compile(npmInfo: NpmInfo, productFilepath: string) {
 
 const getOptions = ({ dir, main, module }: NpmInfo, productFilepath: string) => {
   const inputOptions: RollupOptions = {
-    input: path.resolve(dir, main || module || 'index.js'),
+    input: path.resolve(dir, main || 'index.js'),
     plugins: [
       commonjs(),
       nodeResolve({
@@ -110,8 +110,8 @@ async function build(inputOptions: RollupOptions, outputOptions: RollupOptions) 
     await generateOutputs(bundle);
   } catch (error) {
     // do some error reporting
-    // console.error(error);
-    throw simpleError('构建失败: ', 'Npm2cjsError/compile');
+    console.error(error);
+    throw simpleError('构建失败', 'Npm2cjs/compile Error');
   }
   // @ts-ignore
   if (bundle) {
