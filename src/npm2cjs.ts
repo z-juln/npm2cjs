@@ -72,6 +72,7 @@ class Npm2cjs {
     let pkgJson = clone(originalPkgJson);
     let readme = readmeFilename ? fs.readFileSync(path.resolve(targetDir, readmeFilename)).toString() : null;
 
+    reformBasic();
     reformNameTask();
     reformPublicPublishTask();
     reformReadmeTask();
@@ -80,6 +81,12 @@ class Npm2cjs {
     fs.writeJSONSync(path.resolve(outputDir, 'package.json'), pkgJson, { spaces: 2 });
     if (typeof readme === 'string') {
       fs.writeFileSync(path.resolve(outputDir, readmeFilename ?? 'README.md'), readme);
+    }
+
+    function reformBasic() {
+      if (pkgJson.type === 'module') {
+        pkgJson.type = 'commonjs';
+      }
     }
 
     function reformNameTask() {
