@@ -1,6 +1,7 @@
-import { simpleError } from './../../utils';
 import path from "path";
+import fs from 'fs-extra';
 import compile from '../../compile';
+import { simpleError } from './../../utils';
 import { NpmInfo } from "../../interface";
 
 const npmInfoList: Record<string, NpmInfo> = {
@@ -34,6 +35,8 @@ const npmInfoList: Record<string, NpmInfo> = {
 
 const errorNpmList: string[] = [];
 const productDir = path.resolve(__dirname, './build');
+
+fs.emptyDirSync(productDir);
 
 const promiseList = Object.entries(npmInfoList).map(([name, npmInfo]) => {
 	const productFilepath = path.resolve(productDir, `./${name}.js`);

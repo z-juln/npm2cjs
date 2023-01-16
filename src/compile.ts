@@ -1,5 +1,5 @@
 import path from 'path';
-import { rollup, RollupOptions, OutputOptions, RollupBuild } from 'rollup';
+import { rollup, RollupOptions, OutputOptions, RollupBuild, Plugin } from 'rollup';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
@@ -29,6 +29,7 @@ const getOptions = ({ dir, main, module }: NpmInfo, productFilepath: string) => 
             targets: "node 6",
           }],
         ],
+        minified: true,
       }),
     ],
   };
