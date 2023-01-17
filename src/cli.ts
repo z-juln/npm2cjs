@@ -133,7 +133,8 @@ const doCli = () => {
     .option('-t, --target <target>', "目标代码的类型 'auto' | 'esm' | 'esm_top-level-await'")
     .option('-d, --dist <outputDir>', '将包名为`<pkg-name>`的包转换为cjs, 并保存到`<outputDir>`目录下')
     .option('--no-publish', '是否发布npm, 默认为发布')
-    .action(async (fullPkgName: string, { target, dist: outputDir, publish }) => {
+    .option('--dry-publish', '发布测试, 即npm publish --dry-run')
+    .action(async (fullPkgName: string, { target, dist: outputDir, publish, dryPublish }) => {
       const {
         npmRegistry,
         reformNameType,
@@ -167,8 +168,12 @@ const doCli = () => {
       }).generate();
 
       if (publish) {
+        const npmArgs = ['publish', `--registry=${npmRegistry}`];
+        if (dryPublish) {
+          npmArgs.push('--dry-run');
+        }
         spawn(
-          'npm', ['publish', `--registry=${npmRegistry}`],
+          'npm', npmArgs,
           { cwd: outputTmpDir, stdio: 'inherit' },
         )
           .on('error', (err) => {
