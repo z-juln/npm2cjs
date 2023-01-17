@@ -79,9 +79,7 @@ class Npm2cjs {
     reformKeywordTask();
 
     fs.writeJSONSync(path.resolve(outputDir, 'package.json'), pkgJson, { spaces: 2 });
-    if (typeof readme === 'string') {
-      fs.writeFileSync(path.resolve(outputDir, readmeFilename ?? 'README.md'), readme);
-    }
+    fs.writeFileSync(path.resolve(outputDir, readmeFilename ?? 'README.md'), readme ?? '');
 
     function reformBasic() {
       if (pkgJson.type === 'module') {
@@ -134,9 +132,8 @@ class Npm2cjs {
 
 原npm包: [\`${originalPkgJson.name}\`](https://www.npmjs.com/package/${originalPkgJson.name})
 
-${readme ? '下面为原npm包的README内容' : ''}
-        `;
-        readme = prefix + readme;
+${readme ? '下面为原npm包的README内容' : ''}\n\n`;
+        readme = prefix + (readme ?? '');
       } else throw simpleError(`❌ 不存在的 reformReadme, 请再次校验参数`);
     }
 

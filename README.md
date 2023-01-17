@@ -1,4 +1,4 @@
-# esm2cjs
+# npm2cjs
 
 将常见的其它格式的npm包转成cjs的npm包的cli.
 

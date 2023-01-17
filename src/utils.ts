@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs-extra";
+import glob from "glob";
 
 export const logo = 'data:image/png;base64,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';
 
@@ -10,5 +11,12 @@ export const simpleError = (errMsg: string, tag = 'Npm2cjs Error') => {
   return err;
 }
 
-export const getNpmReadmeFilename = (npmDir: string) =>
-  ['README.md', 'readme.md'].find(p => fs.existsSync(path.resolve(npmDir, p))) ?? null;
+export const getNpmReadmeFilename = (npmDir: string): string | null => {
+  try {
+    const p = glob.sync(path.resolve(npmDir) + '/@(README|readme).md')[0];
+    if (!p) return null;
+    return path.basename(p);
+  } catch {
+    return null;
+  }
+};
