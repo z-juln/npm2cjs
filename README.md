@@ -1,5 +1,15 @@
 # npm2cjs
 
+<div align='center'>
+	<br/>
+	<div style='border: 2px solid yellow; font-size: 20px; width: 60px; height: 60px; line-height: 30px; border-radius: 50%; transform: rotate(45deg);'>
+    <span style='position: relative; top: 2px;'>🌈&nbsp;<span style='display: inline-block; transform: rotate(-45deg);'>🌛</span></span>
+    <br />
+    <span style='position: relative; top: -2px;'><span style='display: inline-block; transform: rotate(-45deg);'>🌞</span>&nbsp;❄️</span>
+  </div>
+	<br/>
+</div>
+
 将常见的其它格式的npm包转成cjs的npm包的cli.
 
 在开发cjs包时, 如果想使用esm包 (如[inquirer最新版本](https://www.npmjs.com/package/inquirer)、[chalk](https://www.npmjs.com/package/chalk)等), 难免需要配置复杂的打包配置来支持. 但也可以另辟蹊径, 用cli的方式自动将这些包转换为cjs包, 并用自己的账户存到npm仓库上. 同时也便于以后的开发.

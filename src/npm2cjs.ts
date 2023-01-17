@@ -124,9 +124,7 @@ class Npm2cjs {
         const prefix = `\
 # ${pkgJson.name}
 
-<div align="center">
-  <img src="${logo}" alt="${myPkgJson.name} logo" />
-</div>
+${logo}
 
 该npm包由 [\`${myPkgJson.name}\`](https://www.npmjs.com/package/${myPkgJson.name}) 转译工具生成.
 
