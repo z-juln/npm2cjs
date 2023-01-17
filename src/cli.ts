@@ -174,20 +174,28 @@ const doCli = () => {
           if (dryPublish) {
             npmArgs.push('--dry-run');
           }
-          spawn(
-            'npm', npmArgs,
-            { cwd: outputTmpDir, stdio: 'inherit' },
-          )
-            .on('error', (err) => {
-              throw simpleError(`npm包发布失败: ${err.toString()}`);
-            });
+          const task = () => new Promise(resolve => {
+            spawn(
+              'npm', npmArgs,
+              { cwd: outputTmpDir, stdio: 'inherit' },
+            )
+              .on('close', resolve)
+              .on('error', (err) => {
+                throw simpleError(`npm包发布失败: ${err.toString()}`);
+              });
+          });
+          await task();
         }
       } finally {
-        [originalTmpDir, outputTmpDir].forEach(dir => {
+        const cleanDir = (dir: string) => {
           if (fs.existsSync(dir)) {
-            fs.rmdirSync(dir, { recursive: true });
+            fs.rm(dir, { recursive: true });
           }
-        });
+        };
+        cleanDir(originalTmpDir);
+        if (!outputDir) {
+          cleanDir(outputTmpDir);
+        }
       }
     });
 
