@@ -19,8 +19,8 @@ export interface Opts {
 const defaultOpts: Partial<Opts> = {
   target: 'auto',
   reformName: {
-    type: 'scope',
-    value: 'npm2cjs',
+    type: 'suffix',
+    value: 'cjs',
   },
   reformPublicPublish: true,
   reformReadme: 'auto',
@@ -87,6 +87,7 @@ class Npm2cjs {
       if (pkgJson.type === 'module') {
         pkgJson.type = 'commonjs';
       }
+      pkgJson[pkgJson.from ? 'from' : `from_${Date.now()}`] = 'npm2cjs(https://www.npmjs.com/package/npm2cjs)';
     }
 
     function reformNameTask() {
