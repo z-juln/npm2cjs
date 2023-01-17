@@ -43,6 +43,7 @@
   "dependencies": {
     "@babel/core": "^7.20.12",
     "@babel/preset-env": "^7.20.2",
+    "@juln/npm-pkg-version": "^1.0.7",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^24.0.0",
     "@rollup/plugin-json": "^6.0.0",
@@ -51,6 +52,7 @@
     "clone": "^2.1.2",
     "configstore": "5.0.1",
     "fs-extra": "^11.1.0",
+    "pull-sparse": "^1.0.0",
     "rollup": "^3.10.0",
     "tty-table": "^4.1.6"
   }

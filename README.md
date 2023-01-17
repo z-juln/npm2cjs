@@ -12,15 +12,17 @@
 
 # Usage
 
-### 设置要发布的包的前缀
+### 设置要发布的包的包名
 
-`npm2cjs config set npm-scope <scope-name>`
+`npm2cjs config set reformNameType=suffix reformNameValue=-cjs` 给包名添加`-cjs`的后缀, 如: 要打包的包名为`chalk`, 发布之后的npm包即为`chalk-cjs`
 
-如 `npm2cjs config set npm-scope npm2cjs` : 要打包的包名为`chalk`, 发布之后的npm包即为`@npm2cjs/chalk`
+更多配置项请使用`npm2cjs config -h`查看
 
 ### npm to cjs
 
 `npm2cjs do <pkg-name>` 将包名为`<pkg-name>`的包转换为cjs, 并发布
+
+也可 `npm2cjs do <pkg-name@version>`
 
 `npm2cjs do <pkg-name> -d <output-dir> --no-publish` 将包名为`<pkg-name>`的包转换为cjs, 并保存到`<output-dir>`目录下, 不发布
 
