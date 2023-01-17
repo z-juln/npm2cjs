@@ -1,6 +1,7 @@
 import os from "os";
 import path from "path";
 import { spawn } from "child_process";
+import fs from "fs-extra";
 import Configstore from 'configstore';
 import { validatePkg } from '@juln/npm-pkg-version';
 import { cac } from "cac";
@@ -151,34 +152,42 @@ const doCli = () => {
       const originalTmpDir = path.resolve(os.tmpdir(), `${fullPkgName}__original__${Date.now()}`);
       const outputTmpDir = outputDir ? path.resolve(outputDir) : path.resolve(os.tmpdir(), `${fullPkgName}__output__${Date.now()}`);
 
-      await npmPull(pkgName, {
-        outputDir: originalTmpDir,
-        registryUrl: npmRegistry,
-        tag: version || 'latest',
-      });
-
-      await new Npm2cjs({
-        targetDir: originalTmpDir,
-        target: target || 'auto',
-        outputDir: outputTmpDir,
-        reformName: { type: reformNameType, value: reformNameValue },
-        reformReadme,
-        reformKeywords,
-        reformPublicPublish: publish,
-      }).generate();
-
-      if (publish) {
-        const npmArgs = ['publish', `--registry=${npmRegistry}`];
-        if (dryPublish) {
-          npmArgs.push('--dry-run');
+      try {
+        await npmPull(pkgName, {
+          outputDir: originalTmpDir,
+          registryUrl: npmRegistry,
+          tag: version || 'latest',
+        });
+  
+        await new Npm2cjs({
+          targetDir: originalTmpDir,
+          target: target || 'auto',
+          outputDir: outputTmpDir,
+          reformName: { type: reformNameType, value: reformNameValue },
+          reformReadme,
+          reformKeywords,
+          reformPublicPublish: publish,
+        }).generate();
+  
+        if (publish) {
+          const npmArgs = ['publish', `--registry=${npmRegistry}`];
+          if (dryPublish) {
+            npmArgs.push('--dry-run');
+          }
+          spawn(
+            'npm', npmArgs,
+            { cwd: outputTmpDir, stdio: 'inherit' },
+          )
+            .on('error', (err) => {
+              throw simpleError(`npm包发布失败: ${err.toString()}`);
+            });
         }
-        spawn(
-          'npm', npmArgs,
-          { cwd: outputTmpDir, stdio: 'inherit' },
-        )
-          .on('error', (err) => {
-            throw simpleError(`npm包发布失败: ${err.toString()}`);
-          });
+      } finally {
+        [originalTmpDir, outputTmpDir].forEach(dir => {
+          if (fs.existsSync(dir)) {
+            fs.rmdirSync(dir);
+          }
+        });
       }
     });
 
