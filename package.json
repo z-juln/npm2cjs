@@ -6,7 +6,9 @@
   "bin": "bin/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "test": "npx ts-node ./src/__test__/compile/index.test.ts",
+    "test": "npm run test:compile && npm run test:npm2cjs",
+    "test:compile": "npx ts-node ./src/__test__/compile/index.test.ts",
+    "test:npm2cjs": "npx ts-node ./src/__test__/npm2cjs/index.test.ts",
     "build": "npx tsc",
     "prepublishOnly": "npm run build"
   },

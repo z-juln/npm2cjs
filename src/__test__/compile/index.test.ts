@@ -34,7 +34,7 @@ const npmInfoList: Record<string, NpmInfo> = {
 };
 
 const errorNpmList: string[] = [];
-const productDir = path.resolve(__dirname, './build');
+const productDir = path.resolve(__dirname, '../build/compile');
 
 fs.emptyDirSync(productDir);
 
