@@ -22,7 +22,7 @@
 
 `npm2cjs do <pkg-name>` 将包名为`<pkg-name>`的包转换为cjs, 并发布
 
-`npm2cjs do <pkg-name> -d <target-dir> --no-publish` 只将包名为`<pkg-name>`的包转换为cjs, 并保存到`<target-dir>`目录下, 不发布
+`npm2cjs do <pkg-name> -d <output-dir> --no-publish` 将包名为`<pkg-name>`的包转换为cjs, 并保存到`<output-dir>`目录下, 不发布
 
 ### 更多配置
 
