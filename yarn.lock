@@ -1591,7 +1591,7 @@ get-symbol-description@^1.0.0:
     call-bind "^1.0.2"
     get-intrinsic "^1.1.1"
 
-glob@^8.0.3, glob@^8.1.0:
+glob@^8.0.3:
   version "8.1.0"
   resolved "http://hnpm.hupu.io/glob/-/glob-8.1.0.tgz#d388f656593ef708ee3e34640fdfb99a9fd1c33e"
   integrity sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==
@@ -2009,6 +2009,11 @@ path-exists@^4.0.0:
   resolved "https://registry.npmjs.org/path-exists/-/path-exists-4.0.0.tgz#513bdbe2d3b95d7762e8c1137efa195c6c61b5b3"
   integrity sha512-ak9Qy5Q7jYb2Wwcey5Fpvg2KoAc/ZIhLSLOSBmRmygPsGwkVVt0fZa0qrtMz+m6tJTAHfZQ8FnmB4MG4LWy7/w==
 
+path-is-absolute@~1.0.0:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/path-is-absolute/-/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
+  integrity sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==
+
 path-parse@^1.0.7:
   version "1.0.7"
   resolved "http://hnpm.hupu.io/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
@@ -2031,6 +2036,13 @@ pull-sparse@^1.0.0:
   dependencies:
     fs-extra "^10.1.0"
     mvdir "^1.0.21"
+
+real-path@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.npmjs.org/real-path/-/real-path-1.0.4.tgz#c5a2f571a876ec1df4b7a16bdee28de1ebc95cd8"
+  integrity sha512-nezvGdqCroart7Rcam+eF9bugOT9efFMlPUBgY4UKEMF8jTXPOyxZrYtOh3jXfp0HMYT/TMaSKnEgwtl8er09A==
+  dependencies:
+    path-is-absolute "~1.0.0"
 
 regenerate-unicode-properties@^10.1.0:
   version "10.1.0"

@@ -1,7 +1,9 @@
 import os from 'os';
 import path from "path";
-import glob from "glob";
-import { nanoid } from 'nanoid'
+import { nanoid } from 'nanoid';
+import fs from 'fs-extra';
+// @ts-ignore
+import realPath from 'real-path';
 
 // markdown注入的logo
 export const logo = `\
@@ -22,11 +24,12 @@ export const simpleError = (errMsg: string, tag = 'Npm2cjs Error') => {
   return err;
 }
 
-// TODO readme在大小写不敏感的磁盘上的问题
 export const getNpmReadmeFilename = (npmDir: string): string | null => {
   try {
-    const p = glob.sync(path.resolve(npmDir) + '/@(README|readme).md')[0];
-    if (!p) return null;
+    // @ts-ignore
+    const p = realPath(path.resolve(npmDir, 'readme.md'));
+    console.log('❌p', npmDir, fs.existsSync(p) ? p : null)
+    if (!fs.existsSync(p)) return null;
     return path.basename(p);
   } catch {
     return null;
