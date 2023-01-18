@@ -22,6 +22,7 @@ export const simpleError = (errMsg: string, tag = 'Npm2cjs Error') => {
   return err;
 }
 
+// TODO readme在大小写不敏感的磁盘上的问题
 export const getNpmReadmeFilename = (npmDir: string): string | null => {
   try {
     const p = glob.sync(path.resolve(npmDir) + '/@(README|readme).md')[0];
