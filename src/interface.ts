@@ -3,6 +3,8 @@ export interface PackageJson {
   version: string;
   main?: string;
   module?: string;
+  types?: string;
+  typings?: string;
   [K: string]: any;
 }
 

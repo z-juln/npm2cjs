@@ -1,7 +1,11 @@
+// TODO 多exports分别compile !!! 会不会有代码问题, 初始import文件会执行多次?
+// TODO exports 多环境分开compile !!!
 import path from 'path';
 import fs from 'fs-extra';
 import clone from 'clone';
-import { getNpmReadmeFilename, logo, simpleError } from './utils';
+import { validatePkg } from '@juln/npm-pkg-version';
+import { npmPull } from 'pull-sparse';
+import { getNpmReadmeFilename, getTempDir, logo, simpleError } from './utils';
 import myPkgJson from '../package.json';
 import compile from './compile';
 import { NpmInfo, PackageJson } from './interface';
@@ -14,6 +18,8 @@ export interface Opts {
   reformReadme?: 'auto' | ((readme: string | null) => string) | false;
   reformKeywords?: 'auto' | string[] | false;
   outputDir: string;
+  /** 尝试下载 @types/<pkgName >的 .d.ts 并自动将路径加入 package.json 的 types 字段, 默认开启 */
+  tryInsertTypes?: boolean;
 }
 
 const defaultOpts: Partial<Opts> = {
@@ -25,6 +31,7 @@ const defaultOpts: Partial<Opts> = {
   reformPublicPublish: true,
   reformReadme: 'auto',
   reformKeywords: 'auto',
+  tryInsertTypes: true,
 };
 
 class Npm2cjs {
@@ -32,7 +39,7 @@ class Npm2cjs {
   private originalNpmInfo: NpmInfo;
 
   constructor(_opts: Opts) {
-    this.opts = Object.assign(defaultOpts, _opts);
+    this.opts = Object.assign(clone(defaultOpts), _opts);
 
     this.originalNpmInfo = getOriginalNpmInfo(this.opts.targetDir);
   }
@@ -53,7 +60,7 @@ class Npm2cjs {
       default: await this.other2cjs(); break;
     }
 
-    this.reform();
+    await this.reform();
   }
 
   private async reform() {
@@ -64,11 +71,12 @@ class Npm2cjs {
       reformPublicPublish,
       reformReadme,
       reformKeywords,
+      tryInsertTypes,
     } = this.opts;
     const { originalNpmInfo } = this;
     const readmeFilename = getNpmReadmeFilename(targetDir);
 
-    const originalPkgJson: PackageJson = fs.readJSONSync(path.resolve(targetDir, 'package.json'));;
+    const originalPkgJson: PackageJson = fs.readJSONSync(path.resolve(targetDir, 'package.json'));
     let pkgJson = clone(originalPkgJson);
     let readme = readmeFilename ? fs.readFileSync(path.resolve(targetDir, readmeFilename)).toString() : null;
 
@@ -77,6 +85,7 @@ class Npm2cjs {
     reformPublicPublishTask();
     reformReadmeTask();
     reformKeywordTask();
+    await reformTypesFile();
 
     fs.writeJSONSync(path.resolve(outputDir, 'package.json'), pkgJson, { spaces: 2 });
     fs.writeFileSync(path.resolve(outputDir, readmeFilename ?? 'README.md'), readme ?? '');
@@ -147,9 +156,49 @@ ${readme ? '下面为原npm包的README内容' : ''}\n\n`;
         pkgJson.keywords = [
           originalPkgJson.name,
           'npm2cjs',
-          ...pkgJson.keywords,
+          ...pkgJson.keywords ?? [],
           'cjs',
         ];
+      }
+    }
+
+    // .d.ts
+    async function reformTypesFile() {
+      if (
+        originalNpmInfo.types ||
+        originalNpmInfo.typings ||
+        fs.existsSync(path.resolve(targetDir, 'index.d.ts'))
+      ) {
+        fs.copySync(
+          path.resolve(targetDir, originalNpmInfo.types || originalNpmInfo.typings || 'index.d.ts'),
+          path.resolve(outputDir, originalNpmInfo.types || originalNpmInfo.typings || 'index.d.ts'),
+        );
+      } else if (tryInsertTypes) {
+        // 尝试下载@types/<pkgName>的.d.ts并自动加入types字段
+        const insertTypes = async () => {
+          const typesPkgName = `@types/${originalNpmInfo.name.replace('@', '__')}`;
+          if (!await validatePkg(typesPkgName, {})) return;
+          const tempDir = getTempDir(typesPkgName.replace('/', '_'));
+          await npmPull(typesPkgName, {
+            outputDir: tempDir,
+            // TODO version对应关系???
+            tag: 'latest',
+          });
+          const tempTypesPkgJson: PackageJson = fs.readJSONSync(path.resolve(tempDir, 'package.json'));
+          const relativeFilepath = tempTypesPkgJson.types ?? tempTypesPkgJson.typings ?? 'index.d.ts';
+          const tempTypesFilepath = path.resolve(tempDir, relativeFilepath);
+          const outputTypesFilepath = path.resolve(outputDir, relativeFilepath);
+          if (fs.existsSync(outputTypesFilepath)) {
+            throw simpleError(`❌ 添加类型文件失败: ${outputTypesFilepath} 已存在.\n如果是手动修改了包目录, 请掉整文件位置, 或者将`);
+          }
+          fs.copyFileSync(
+            tempTypesFilepath,
+            outputTypesFilepath,
+          );
+          pkgJson.types = relativeFilepath;
+          pkgJson.typings = relativeFilepath;
+        };
+        await insertTypes();
       }
     }
   }

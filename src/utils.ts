@@ -1,5 +1,7 @@
+import os from 'os';
 import path from "path";
 import glob from "glob";
+import { nanoid } from 'nanoid'
 
 // markdown注入的logo
 export const logo = `\
@@ -29,3 +31,5 @@ export const getNpmReadmeFilename = (npmDir: string): string | null => {
     return null;
   }
 };
+
+export const getTempDir = (name: string) => path.resolve(os.tmpdir(), `${name}__${nanoid()}`);

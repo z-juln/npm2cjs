@@ -9,7 +9,7 @@ import TtyTable from "tty-table";
 import { npmPull } from "pull-sparse";
 import packageJson from '../package.json';
 import Npm2cjs, { Opts as Npm2cjsOpts } from "./npm2cjs";
-import { simpleError } from "./utils";
+import { getTempDir, simpleError } from "./utils";
 
 const configOptsTable = TtyTable(
   // @ts-ignore
@@ -135,7 +135,8 @@ const doCli = () => {
     .option('-d, --dist <outputDir>', '将包名为`<pkg-name>`的包转换为cjs, 并保存到`<outputDir>`目录下')
     .option('--no-publish', '是否发布npm, 默认为发布')
     .option('--dry-publish', '发布测试, 即npm publish --dry-run')
-    .action(async (fullPkgName: string, { target, dist: outputDir, publish, dryPublish }) => {
+    .option('--types, --try-insert-types', '如果package.json中没有指定types(typings)字段, 会尝试拉取@types/<pkgName>并设置types字段', { default: true })
+    .action(async (fullPkgName: string, { target, dist: outputDir, publish, dryPublish, types }) => {
       const {
         npmRegistry,
         reformNameType,
@@ -149,8 +150,8 @@ const doCli = () => {
         throw simpleError(`当前npm源(${npmRegistry})上不存在${fullPkgName}`);
       }
 
-      const originalTmpDir = path.resolve(os.tmpdir(), `${fullPkgName}__original__${Date.now()}`);
-      const outputTmpDir = outputDir ? path.resolve(outputDir) : path.resolve(os.tmpdir(), `${fullPkgName}__output__${Date.now()}`);
+      const originalTmpDir = getTempDir(`${fullPkgName}__original`);
+      const outputTmpDir = outputDir ? path.resolve(outputDir) : getTempDir(`${fullPkgName}__output`);
 
       try {
         await npmPull(pkgName, {
@@ -167,6 +168,7 @@ const doCli = () => {
           reformReadme,
           reformKeywords,
           reformPublicPublish: publish,
+          tryInsertTypes: types,
         }).generate();
   
         if (publish) {

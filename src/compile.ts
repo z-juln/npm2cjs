@@ -14,7 +14,7 @@ async function compile(npmInfo: NpmInfo, productFilepath: string) {
   await build(inputOptions, outputOptions);
 }
 
-const getOptions = ({ dir, main, module }: NpmInfo, productFilepath: string) => {
+const getOptions = ({ dir, main }: NpmInfo, productFilepath: string) => {
   const inputOptions: RollupOptions = {
     input: path.resolve(dir, main || 'index.js'),
     plugins: [
