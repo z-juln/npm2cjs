@@ -206,6 +206,4 @@ const doCli = () => {
   cli.parse();
 };
 
-doCli();
-
 export default doCli;
