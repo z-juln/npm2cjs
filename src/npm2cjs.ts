@@ -181,7 +181,7 @@ ${readme ? '下面为原npm包的README内容' : ''}\n\n`;
           const tempDir = getTempDir(typesPkgName.replace('/', '_'));
           await npmPull(typesPkgName, {
             outputDir: tempDir,
-            // TODO version对应关系???
+            // TODO 传入对应的@types的版本
             tag: 'latest',
           });
           const tempTypesPkgJson: PackageJson = fs.readJSONSync(path.resolve(tempDir, 'package.json'));
