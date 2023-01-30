@@ -202,7 +202,17 @@ const doCli = () => {
     });
 
   cli.version(packageJson.version);
-  cli.help();
+  cli.help(sections => {
+    const Commands = sections.find(section => section.title === 'Commands');
+    const ForMoreInfo = sections.find(section => section.title?.includes('For more info'));
+    if (Commands) {
+      Commands.body += '\n  config  修改全局配置项';
+    }
+    if (ForMoreInfo) {
+      ForMoreInfo.body += '\n  $ npm2cjs config --help';
+    }
+    return sections;
+  });
   cli.parse();
 };
 
