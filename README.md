@@ -40,6 +40,10 @@
 
 请使用`npm2cjs -h`查看
 
-# 两个问题无法解决
+# 两个问题尚未解决
 
-1. 目标包不能用`top-level-await`, babel不会解析`top-level-await`且直接保留代码, webpack解析`top-level-await`会有bug
+1. 目标包不能用`top-level-await`, babel不会解析`top-level-await`且直接保留代码, webpack解析`top-level-await`会有bug. 需要单独的解析器(详细看文章[mjs转译为cjs(快来造轮子)](https://juejin.cn/post/7188811856281075767)), 尚未开始开发, 欢迎一起搞
+
+2. 不支持多个入口文件, 目前是只打算支持一个入口文件的转换
+
+3. 不支持多个导出文件, 功能尚未完成
