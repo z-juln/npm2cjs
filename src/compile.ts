@@ -26,7 +26,7 @@ const getOptions = ({ dir, main }: NpmInfo, productFilepath: string) => {
       json(),
       getBabelOutputPlugin({
         presets: [
-          ["@babel/preset-env", {
+          [require.resolve("@babel/preset-env"), {
             targets: "node 6",
           }],
         ],
