@@ -1,6 +1,6 @@
 {
   "name": "npm2cjs",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "将常见的其它格式的npm包转成cjs的npm包的cli",
   "main": "dist/npm2cjs.js",
   "bin": "bin/index.js",
