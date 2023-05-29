@@ -5,6 +5,7 @@ export interface PackageJson {
   module?: string;
   types?: string;
   typings?: string;
+  files?: string[];
   [K: string]: any;
 }
 

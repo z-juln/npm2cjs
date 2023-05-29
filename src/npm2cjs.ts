@@ -197,6 +197,9 @@ ${readme ? '下面为原npm包的README内容' : ''}\n\n`;
           );
           pkgJson.types = relativeFilepath;
           pkgJson.typings = relativeFilepath;
+          if (pkgJson.files && !pkgJson.files.includes(relativeFilepath)) {
+            pkgJson.files.push(relativeFilepath);
+          }
         };
         await insertTypes();
       }

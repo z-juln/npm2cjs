@@ -5,6 +5,8 @@ import Npm2cjs from '../../npm2cjs';
 const outputRoot = path.resolve(__dirname, '../build/npm2cjs');
 
 const targets = [
+  // esm + 有@types/inquirer + files中不包含index.d.ts
+  'inquirer',
   // esm + 设置了typings
   'chalk',
   // cjs + 没设置typings + 有index.d.ts
