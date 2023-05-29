@@ -55,6 +55,7 @@ export interface CliOpts {
       targetDir?: string;
     };
   };
+  force?: boolean;
 }
 
 const getConfigCli = () => {
@@ -136,7 +137,8 @@ const doCli = () => {
     .option('--no-publish', '是否发布npm, 默认为发布')
     .option('--dry-publish', '发布测试, 即npm publish --dry-run')
     .option('--types, --try-insert-types', '如果package.json中没有指定types(typings)字段, 会尝试拉取@types/<pkgName>并设置types字段', { default: true })
-    .action(async (fullPkgName: string, { target, dist: outputDir, publish, dryPublish, types }) => {
+    .option('-f, --force', 'npm publish --force', { default: false })
+    .action(async (fullPkgName: string, { target, dist: outputDir, publish, dryPublish, types, force }) => {
       const {
         npmRegistry,
         reformNameType,
@@ -175,6 +177,9 @@ const doCli = () => {
           const npmArgs = ['publish', `--registry=${npmRegistry}`];
           if (dryPublish) {
             npmArgs.push('--dry-run');
+          }
+          if (force) {
+            npmArgs.push('--force');
           }
           const task = () => new Promise(resolve => {
             spawn(
